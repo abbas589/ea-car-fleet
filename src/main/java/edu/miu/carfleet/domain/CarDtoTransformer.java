@@ -11,7 +11,10 @@ import java.util.List;
 public class CarDtoTransformer {
 
     public static CarDto transformCarToDto(Car car) {
-        return new CarDto(car.getLicensePlate(), car.getType(), car.getBrand(), car.getPrice());
+        return new CarDto(car.getLicensePlate(), car.getType(), car.getBrand(), car.getPrice(),car.getAvailable());
+    }
+    public static Car transformCarDtoToCar(CarDto car) {
+        return new Car(car.getLicensePlate(), car.getType(), car.getBrand(), car.getPrice(),car.getAvailable());
     }
 
     public static CarsDto transformCarsToDto(List<Car> cars) {

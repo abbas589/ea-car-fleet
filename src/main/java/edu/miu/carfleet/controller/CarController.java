@@ -2,6 +2,7 @@ package edu.miu.carfleet.controller;
 
 import edu.miu.carfleet.domain.Car;
 import edu.miu.carfleet.domain.CarDto;
+import edu.miu.carfleet.domain.CarDtoTransformer;
 import edu.miu.carfleet.domain.CarError;
 import edu.miu.carfleet.repository.CarRepository;
 import edu.miu.carfleet.service.CarService;
@@ -33,7 +34,7 @@ public class CarController {
         if (optionalCar.isPresent()) {
             return new ResponseEntity<>(new CarError("Sorry, a Car with this plate number already exists."), HttpStatus.CONFLICT);
         }
-        carService.createCar(carDto);
+        carService.createCar(CarDtoTransformer.transformCarDtoToCar(carDto));
         return new ResponseEntity<>(carDto, HttpStatus.CREATED);
     }
 

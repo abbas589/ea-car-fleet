@@ -26,14 +26,11 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public CarDto createCar(CarDto carDto) {
-        Car car = new Car();
-        car.setLicensePlate(car.getLicensePlate());
-        car.setType(carDto.getType());
-        car.setBrand(carDto.getBrand());
-        car.setPrice(carDto.getPrice());
-        car.setAvailable(true);
-        return CarDtoTransformer.transformCarToDto(carRepository.save(car));
+    public CarDto createCar(Car car) {
+
+        car = carRepository.save(car);
+        System.out.println("carrr "+car);
+        return CarDtoTransformer.transformCarToDto(car);
     }
 
     @Override
@@ -59,7 +56,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarsDto searchCar(String searchType, String searchValue) {
-        List<Car> carList = switch (searchType) {
+        List<Car> carList = switch (searchType.toLowerCase()) {
             case "type" -> carRepository.findAllByType(searchValue);
             case "brand" -> carRepository.findAllByBrand(searchValue);
             case "price" -> carRepository.findAllByPrice(BigDecimal.valueOf(Long.parseLong(searchValue)));

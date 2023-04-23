@@ -11,7 +11,7 @@ import edu.miu.carfleet.domain.CarsDto;
  */
 public interface CarService {
 
-    CarDto createCar(CarDto carDto);
+    CarDto createCar(Car car);
     void removeCar(Car car);
     CarDto updateCar(Car car, CarDto newCarDto);
     CarsDto searchCar(String searchType, String searchValue);
