@@ -1,11 +1,17 @@
 package edu.miu.carfleet.service;
 
+import com.google.gson.Gson;
+import edu.miu.carfleet.AppConfiguration;
 import edu.miu.carfleet.domain.Car;
 import edu.miu.carfleet.domain.CarDto;
 import edu.miu.carfleet.domain.CarDtoTransformer;
 import edu.miu.carfleet.domain.CarsDto;
 import edu.miu.carfleet.repository.CarRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +31,23 @@ public class CarServiceImpl implements CarService {
     @Autowired
     private CarRepository carRepository;
 
+    Logger logger = LoggerFactory.getLogger(CarService.class);
+
+    @Autowired
+    AppConfiguration appConfiguration;
+
+    @Autowired
+    Gson gson;
+
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     @Transactional
     public CarDto createCar(Car car) {
 
         car = carRepository.save(car);
-        System.out.println("carrr "+car);
+        logger.info("CREATED CAR {} ", gson.toJson(car));
         return CarDtoTransformer.transformCarToDto(car);
     }
 
@@ -38,6 +55,7 @@ public class CarServiceImpl implements CarService {
     @Transactional
     public void removeCar(Car car) {
         carRepository.delete(car);
+        logger.info("DELETED CAR {} ", gson.toJson(car));
     }
 
     @Override
@@ -52,9 +70,11 @@ public class CarServiceImpl implements CarService {
         if (newCarDto.getType() != null) {
             car.setType(newCarDto.getType());
         }
-        if(newCarDto.getAvailable()!=null){
+        if (newCarDto.getAvailable() != null) {
             car.setAvailable(newCarDto.getAvailable());
         }
+        logger.info("UPDATED  CAR {} ", gson.toJson(car));
+
         return CarDtoTransformer.transformCarToDto(carRepository.save(car));
     }
 
@@ -71,13 +91,23 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Long getAvailableCount(String brand, String type) {
-        return carRepository.countAllByAvailableAndBrandAndType(true, brand, type);
+        Long count = carRepository.countAllByAvailableAndBrandAndType(true, brand, type);
+        if (count < 3) {
+            logger.info("ABOUT TO PUBLISH EVENT DUE TO LOW COUNT ======= {}", count);
+            applicationEventPublisher.publishEvent(new NotificationEvent(String.format("Low Car count for Type %s and Brand %s", type, brand)));
+        }
+        return count;
     }
 
     @Override
     @Transactional
-    public CarDto reserveCar(Car car) {
+    @JmsListener(destination = "reserve-car")
+    public CarDto reserveCar(String licensePlate) {
+
+        logger.info("Gotten Car Reservation Notification =====================");
+        Car car = carRepository.findById(licensePlate).get();
+
         car.setAvailable(false);
-        return  CarDtoTransformer.transformCarToDto(carRepository.save(car));
+        return CarDtoTransformer.transformCarToDto(carRepository.save(car));
     }
 }

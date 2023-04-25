@@ -20,7 +20,7 @@ public class Car {
     private String brand;
     private BigDecimal price;
     private Boolean available;
-    private final LocalDateTime createdAt = LocalDateTime.now();
+//    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public Car(){
         super();
@@ -74,7 +74,8 @@ public class Car {
         this.available = available;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+//    public LocalDateTime getCreatedAt() {
+//        return createdAt;
+//    }
+
 }

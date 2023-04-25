@@ -23,4 +23,11 @@ public class CarsDto {
     public void setCars(Collection<CarDto> cars) {
         this.cars = cars;
     }
+
+    @Override
+    public String toString() {
+        return "Car List{" +
+                "cars=" + cars +
+                '}';
+    }
 }

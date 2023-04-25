@@ -17,6 +17,6 @@ public interface CarService {
     CarsDto searchCar(String searchBy, String value);
     Long getAvailableCount(String brand, String type);
 
-    CarDto reserveCar(Car car);
+    CarDto reserveCar(String licensePlate);
 
 }

@@ -47,7 +47,7 @@ public class CarController {
             return new ResponseEntity<>(new CarError("Sorry, This car is not Available"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(carService.reserveCar(optionalCar.get()), HttpStatus.CREATED);
+        return new ResponseEntity<>(carService.reserveCar(licensePlate), HttpStatus.CREATED);
     }
 
     @PutMapping("/{licensePlate}/update")

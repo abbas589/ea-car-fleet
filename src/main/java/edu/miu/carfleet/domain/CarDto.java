@@ -1,5 +1,8 @@
 package edu.miu.carfleet.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 
 /**
@@ -19,7 +22,7 @@ public class CarDto {
     public CarDto() {
     }
 
-    public CarDto(String licensePlate, String type, String brand, BigDecimal price,Boolean available) {
+    public CarDto(String licensePlate, String type, String brand, BigDecimal price, Boolean available) {
         this.licensePlate = licensePlate;
         this.type = type;
         this.brand = brand;
@@ -66,4 +69,17 @@ public class CarDto {
     public void setAvailable(Boolean available) {
         this.available = available;
     }
+
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+                .append("License Plate", licensePlate)
+                .append("Type", type)
+                .append("Brand", brand)
+                .append("Price", price)
+                .append("Available", available)
+                .toString();
+    }
 }
+
