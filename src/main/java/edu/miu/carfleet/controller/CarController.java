@@ -37,6 +37,18 @@ public class CarController {
         carService.createCar(CarDtoTransformer.transformCarDtoToCar(carDto));
         return new ResponseEntity<>(carDto, HttpStatus.CREATED);
     }
+    @PostMapping("/{licensePlate}/reserve")
+    public ResponseEntity<?> reserveCar(@PathVariable("licensePlate") String licensePlate) {
+        Optional<Car> optionalCar = carRepository.findById(licensePlate);
+        if (!optionalCar.isPresent()) {
+            return new ResponseEntity<>(new CarError("Sorry, you entered an invalid License Plate"), HttpStatus.NOT_FOUND);
+        }
+        if(!optionalCar.get().getAvailable()){
+            return new ResponseEntity<>(new CarError("Sorry, This car is not Available"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(carService.reserveCar(optionalCar.get()), HttpStatus.CREATED);
+    }
 
     @PutMapping("/{licensePlate}/update")
     public ResponseEntity<?> updateCar(@PathVariable("licensePlate") String licensePlate, @RequestBody CarDto dto) {
@@ -58,8 +70,8 @@ public class CarController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchCar(@RequestParam("searchType") String searchType, @RequestParam("searchValue") String searchValue) {
-        return new ResponseEntity<>(carService.searchCar(searchType, searchValue), HttpStatus.OK);
+    public ResponseEntity<?> searchCar(@RequestParam("searchBy") String searchBy, @RequestParam("value") String value) {
+        return new ResponseEntity<>(carService.searchCar(searchBy, value), HttpStatus.OK);
     }
 
     @GetMapping("/get-car-count")

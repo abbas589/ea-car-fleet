@@ -14,7 +14,9 @@ public interface CarService {
     CarDto createCar(Car car);
     void removeCar(Car car);
     CarDto updateCar(Car car, CarDto newCarDto);
-    CarsDto searchCar(String searchType, String searchValue);
+    CarsDto searchCar(String searchBy, String value);
     Long getAvailableCount(String brand, String type);
+
+    CarDto reserveCar(Car car);
 
 }

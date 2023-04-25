@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author bazz
@@ -51,15 +52,18 @@ public class CarServiceImpl implements CarService {
         if (newCarDto.getType() != null) {
             car.setType(newCarDto.getType());
         }
+        if(newCarDto.getAvailable()!=null){
+            car.setAvailable(newCarDto.getAvailable());
+        }
         return CarDtoTransformer.transformCarToDto(carRepository.save(car));
     }
 
     @Override
-    public CarsDto searchCar(String searchType, String searchValue) {
+    public CarsDto searchCar(String searchType, String value) {
         List<Car> carList = switch (searchType.toLowerCase()) {
-            case "type" -> carRepository.findAllByType(searchValue);
-            case "brand" -> carRepository.findAllByBrand(searchValue);
-            case "price" -> carRepository.findAllByPrice(BigDecimal.valueOf(Long.parseLong(searchValue)));
+            case "type" -> carRepository.findAllByType(value);
+            case "brand" -> carRepository.findAllByBrand(value);
+            case "price" -> carRepository.findAllByPrice(BigDecimal.valueOf(Long.parseLong(value)));
             default -> Collections.emptyList();
         };
         return CarDtoTransformer.transformCarsToDto(carList);
@@ -68,5 +72,12 @@ public class CarServiceImpl implements CarService {
     @Override
     public Long getAvailableCount(String brand, String type) {
         return carRepository.countAllByAvailableAndBrandAndType(true, brand, type);
+    }
+
+    @Override
+    @Transactional
+    public CarDto reserveCar(Car car) {
+        car.setAvailable(false);
+        return  CarDtoTransformer.transformCarToDto(carRepository.save(car));
     }
 }

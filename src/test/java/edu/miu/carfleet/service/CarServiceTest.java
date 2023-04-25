@@ -114,7 +114,6 @@ class CarServiceTest {
     @Test
     void getAvailableCount() {
         Long peugeotCount = carService.getAvailableCount("Peugeot", "406");
-
         assertThat(peugeotCount).isEqualTo(5);
     }
 }
