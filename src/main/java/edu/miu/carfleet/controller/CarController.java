@@ -37,7 +37,7 @@ public class CarController {
         carService.createCar(CarDtoTransformer.transformCarDtoToCar(carDto));
         return new ResponseEntity<>(carDto, HttpStatus.CREATED);
     }
-    @PostMapping("/{licensePlate}/reserve")
+    @GetMapping("/{licensePlate}/reserve")
     public ResponseEntity<?> reserveCar(@PathVariable("licensePlate") String licensePlate) {
         Optional<Car> optionalCar = carRepository.findById(licensePlate);
         if (!optionalCar.isPresent()) {

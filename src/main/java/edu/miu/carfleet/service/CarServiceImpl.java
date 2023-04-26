@@ -80,6 +80,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarsDto searchCar(String searchType, String value) {
+        logger.info("Searching car........");
         List<Car> carList = switch (searchType.toLowerCase()) {
             case "type" -> carRepository.findAllByType(value);
             case "brand" -> carRepository.findAllByBrand(value);
@@ -104,7 +105,7 @@ public class CarServiceImpl implements CarService {
     @JmsListener(destination = "reserve-car")
     public CarDto reserveCar(String licensePlate) {
 
-        logger.info("Gotten Car Reservation Notification =====================");
+        logger.info("Gotten Car Reservation Notification ===================== {}",licensePlate);
         Car car = carRepository.findById(licensePlate).get();
 
         car.setAvailable(false);
