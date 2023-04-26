@@ -18,5 +18,6 @@ public interface CarService {
     Long getAvailableCount(String brand, String type);
 
     CarDto reserveCar(String licensePlate);
+    void reserveCarJms(String licensePlate);
 
 }

@@ -73,13 +73,14 @@ public class CarDto {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
-                .append("License Plate", licensePlate)
-                .append("Type", type)
-                .append("Brand", brand)
-                .append("Price", price)
-                .append("Available", available)
-                .toString();
+        String format = "| %-15s | %-10s | %-10s | %10s | %-8s |\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("+-----------------+------------+------------+------------+----------+\n");
+        sb.append("| License Plate   | Type       | Brand      | Price      | Available|\n");
+        sb.append("+-----------------+------------+------------+------------+----------+\n");
+        sb.append(String.format(format, licensePlate, type, brand, price, available));
+        sb.append("+-----------------+------------+------------+------------+----------+\n");
+        return sb.toString();
     }
 }
 

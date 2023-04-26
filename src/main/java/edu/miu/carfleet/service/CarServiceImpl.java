@@ -83,6 +83,7 @@ public class CarServiceImpl implements CarService {
         logger.info("Searching car........");
         List<Car> carList = switch (searchType.toLowerCase()) {
             case "type" -> carRepository.findAllByType(value);
+            case "licenseplate" -> Collections.singletonList(carRepository.findById(value).get());
             case "brand" -> carRepository.findAllByBrand(value);
             case "price" -> carRepository.findAllByPrice(BigDecimal.valueOf(Long.parseLong(value)));
             default -> Collections.emptyList();
@@ -102,7 +103,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    @JmsListener(destination = "reserve-car")
     public CarDto reserveCar(String licensePlate) {
 
         logger.info("Gotten Car Reservation Notification ===================== {}",licensePlate);
@@ -110,5 +110,18 @@ public class CarServiceImpl implements CarService {
 
         car.setAvailable(false);
         return CarDtoTransformer.transformCarToDto(carRepository.save(car));
+    }
+
+    @Override
+    @Transactional
+    @JmsListener(destination = "reserve-car")
+    public void reserveCarJms(String licensePlate) {
+
+        logger.info("Gotten Car Reservation JMS Notification ===================== {}",licensePlate);
+        Car car = carRepository.findById(licensePlate).get();
+
+        car.setAvailable(false);
+        carRepository.save(car);
+        getAvailableCount(car.getBrand(),car.getType());
     }
 }

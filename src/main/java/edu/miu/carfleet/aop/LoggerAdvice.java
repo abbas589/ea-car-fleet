@@ -23,17 +23,17 @@ public class LoggerAdvice {
         String methodName = joinPoint.getSignature().getName();
         Object[] methodArgs = joinPoint.getArgs();
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("--------------------------------------------------------------\n");
-        sb.append(String.format("Calling method: %s\n", methodName));
-        sb.append("Method arguments:\n");
-        for (Object arg : methodArgs) {
-            sb.append(String.format("- %s\n", arg));
-        }
-        sb.append("--------------------------------------------------------------\n");
+        System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.printf("| %-38s | %-49s |\n", "Method Name", methodName);
+        System.out.println("|----------------------------------------|---------------------------------------------------|");
+        System.out.printf("| %-38s | %-49s |\n", "Method Arguments", "Values");
+        System.out.println("|----------------------------------------|---------------------------------------------------|");
 
-        logger.info(sb.toString());
+        for (int i = 0; i < methodArgs.length; i++) {
+            System.out.printf("| %-38s | %-60s |\n", "arg" + (i + 1), methodArgs[i]);
+        }
+
+        System.out.println("--------------------------------------------------------------------------------------------");
     }
 
 }

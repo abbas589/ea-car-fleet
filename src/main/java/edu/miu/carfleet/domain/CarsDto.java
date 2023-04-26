@@ -26,8 +26,18 @@ public class CarsDto {
 
     @Override
     public String toString() {
-        return "Car List{" +
-                "cars=" + cars +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("----------------------------------------------------------------------------------------\n");
+        sb.append(String.format("| %-16s | %-11s | %-15s | %-10s | %-10s |\n", "License Plate", "Type", "Brand", "Price", "Available"));
+        sb.append("|------------------|-------------|-----------------|------------|------------|\n");
+
+        for (CarDto car : cars) {
+            sb.append(String.format("| %-16s | %-11s | %-15s | %-10s | %-10s |\n", car.getLicensePlate(), car.getType(), car.getBrand(), car.getPrice(), car.getAvailable()));
+        }
+
+        sb.append("----------------------------------------------------------------------------------------\n");
+
+        return sb.toString();
     }
 }

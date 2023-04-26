@@ -28,9 +28,9 @@ public class CarCronSchedule {
 
     @Scheduled(fixedRate = 20, initialDelay = 2, timeUnit = TimeUnit.SECONDS)
     public void printCarDetails(){
-        logger.info("Printing Car Information ========================= ");
+//        logger.info("Printing Car Information ========================= ");
         logger.info(CarDtoTransformer
                 .transformCarsToDto(carRepository.findAll()).toString());
-        logger.info("Printing Car Information ========================= ");
+//        logger.info("Printing Car Information ========================= ");
     }
 }

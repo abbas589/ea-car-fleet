@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 public class EventListener {
 
 
-    Logger logger = LoggerFactory.getLogger(EventListener.class);
+//    Logger logger = LoggerFactory.getLogger(EventListener.class);
     @org.springframework.context.event.EventListener
     public void sendNotification(NotificationEvent event){
-        logger.warn("SENDING EMAIL TO FLEET MANAGER ======= {} ===============",event.getMessage());
+        System.out.println("SENDING EMAIL TO FLEET MANAGER ======= {} ===============" +event.getMessage());
     }
 
 

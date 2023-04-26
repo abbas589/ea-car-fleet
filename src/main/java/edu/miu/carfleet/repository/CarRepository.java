@@ -19,6 +19,7 @@ public interface CarRepository extends MongoRepository<Car, String> {
     List<Car> findAllByPrice(BigDecimal price);
 
     List<Car> findAllByType(String type);
+
     Long countAllByBrandAndType(String brand, String type);
     Long countAllByAvailableAndBrandAndType(Boolean avaialbale,String brand, String type);
 }
